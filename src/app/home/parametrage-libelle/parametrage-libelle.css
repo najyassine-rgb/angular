@@ -1,11 +1,67 @@
+/* ── Header (exact home.css style) ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.left,
+.right {
+  width: 150px;
+  display: flex;
+  align-items: center;
+}
+
+.right { justify-content: flex-end; }
+.logo { height: 40px; }
+.logout-icon { height: 28px; cursor: pointer; }
+
+.center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.menu { display: flex; gap: 40px; align-items: center; }
+
+.menu-item {
+  position: relative;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.menu-item span:hover,
+.dropdown-title:hover { color: var(--accent); }
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 5px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-width: 200px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.dropdown:hover .dropdown-menu { display: block; }
+.dropdown-item { padding: 10px 15px; }
+.dropdown-item:hover { background: var(--bg); color: var(--accent); }
+
+/* ── Keep all your existing libelle styles below ── */
 .libelle-container {
   font-family: Arial, sans-serif;
   font-size: 12px;
   background: #fff;
-  min-height: 100vh;
+  min-height: calc(100vh - 71px);
 }
 
-/* Top bar */
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -46,7 +102,6 @@
 .btn-red { background: #e53935; color: white; font-size: 11px; }
 .btn-red:hover { background: #b71c1c; }
 
-/* Group bar */
 .group-bar {
   background: #ececec;
   border-bottom: 1px solid #ddd;
@@ -56,7 +111,6 @@
   font-style: italic;
 }
 
-/* Main table */
 .main-table { width: 100%; border-collapse: collapse; }
 .main-table thead tr { background: #f0f0f0; }
 .main-table th {
@@ -75,7 +129,6 @@
 .filter-icon { font-size: 9px; color: #999; margin-left: 4px; }
 .pin { font-size: 10px; color: #888; }
 
-/* Overlay + Dialog */
 .overlay {
   position: fixed; top: 0; left: 0;
   width: 100vw; height: 100vh;
@@ -84,7 +137,6 @@
   z-index: 1000;
 }
 
-/* Dialog needs enough height */
 .dialog {
   background: #f0f0f0;
   border: 1px solid #aaa;
@@ -120,18 +172,14 @@
   width: fit-content;
 }
 
-/* Field rows */
 .field-row {
   display: flex; align-items: center;
   gap: 8px; margin-bottom: 6px;
   position: relative;
 }
 
-.field-row label {
-  width: 110px; font-size: 12px; text-align: right;
-}
+.field-row label { width: 110px; font-size: 12px; text-align: right; }
 
-/* Custom select */
 .custom-select-wrap { position: relative; }
 
 .custom-select {
@@ -146,7 +194,6 @@
 .custom-select.tb-sel { width: 120px; font-size: 11px; }
 .arrow { font-size: 9px; color: #666; }
 
-/* Popup dropdown */
 .popup-dropdown {
   position: absolute;
   top: 24px; left: 0;
@@ -188,7 +235,6 @@
 }
 .popup-close:hover { background: #eee; }
 
-/* Toolbar row */
 .toolbar-row {
   display: flex; align-items: center;
   gap: 4px; margin-bottom: 6px;
@@ -201,7 +247,6 @@
   background: white;
 }
 
-/* Detail table */
 .detail-table {
   width: 100%; border-collapse: collapse;
   background: white; margin-bottom: 6px;
@@ -224,7 +269,6 @@
   padding: 0 3px;
 }
 
-/* Preview white area */
 .preview-area {
   background: white;
   border: 1px solid #ccc;
@@ -233,7 +277,6 @@
   margin-top: 4px;
 }
 
-/* Footer with Valider at bottom right */
 .dialog-footer {
   display: flex;
   justify-content: flex-end;

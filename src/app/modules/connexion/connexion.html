@@ -1,42 +1,56 @@
+<!-- HEADER (same as home) -->
+<div class="header">
+  <div class="left">
+    <img src="assets/logo-FMC.svg" class="logo" />
+  </div>
+  <div class="center">
+    <div class="menu">
+      <div class="menu-item" *ngFor="let item of menuItems">
+        <span *ngIf="!item.children" (click)="navigate(item.route)">
+          {{ item.label }}
+        </span>
+        <div class="dropdown" *ngIf="item.children">
+          <span class="dropdown-title">{{ item.label }} ▼</span>
+          <div class="dropdown-menu">
+            <div class="dropdown-item"
+                 *ngFor="let child of item.children"
+                 (click)="navigate(child.route)">
+              {{ child.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <img src="assets/logout.png" class="logout-icon" (click)="logout()" />
+  </div>
+</div>
+
+<!-- PAGE CONTENT -->
+<div class="connexion-page">
   <div class="modal">
 
-    <!-- HEADER -->
     <div class="modal-header">
       <h2>Société</h2>
-
-      <button class="close-btn" (click)="close()">
-        ✕
-      </button>
+      <button class="close-btn" (click)="close()">✕</button>
     </div>
 
-    <!-- BODY -->
     <div class="modal-body">
-
+      <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
       <label>Société</label>
-
       <select [(ngModel)]="selectedSociete">
-  <!-- <option *ngFor="let s of societes" [value]="s.code">
-    {{ s.label }}
-  </option> -->
-  <option *ngFor="let s of societes" [value]="s.CPY">
-  {{ s.CPYNAM }}
-</option>
-</select>
-
+        <option value=""></option>
+        <option *ngFor="let s of societes" [value]="s.CPY">
+          {{ s.CPYNAM }}
+        </option>
+      </select>
     </div>
 
-    <!-- FOOTER -->
     <div class="modal-footer">
-
-      <button class="btn cancel" (click)="close()">
-        Annuler
-      </button>
-
-      <button class="btn primary" (click)="validate()">
-        Valider
-      </button>
-
+      <button class="btn cancel" (click)="close()">Annuler</button>
+      <button class="btn primary" (click)="validate()">Valider</button>
     </div>
 
   </div>
-
+</div>

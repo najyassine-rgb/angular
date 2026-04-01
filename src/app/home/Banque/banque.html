@@ -1,3 +1,33 @@
+<!-- HEADER (same as home) -->
+<div class="header">
+  <div class="left">
+    <img src="assets/logo-FMC.svg" class="logo" />
+  </div>
+  <div class="center">
+    <div class="menu">
+      <div class="menu-item" *ngFor="let item of menuItems">
+        <span *ngIf="!item.children" (click)="navigate(item.route)">
+          {{ item.label }}
+        </span>
+        <div class="dropdown" *ngIf="item.children">
+          <span class="dropdown-title">{{ item.label }} ▼</span>
+          <div class="dropdown-menu">
+            <div class="dropdown-item"
+                 *ngFor="let child of item.children"
+                 (click)="navigate(child.route)">
+              {{ child.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <img src="assets/logout.png" class="logout-icon" (click)="logout()" />
+  </div>
+</div>
+
+<!-- BANQUE CONTENT -->
 <div class="banque-container">
 
   <div class="toolbar">
@@ -6,7 +36,7 @@
       <span class="x-icon">✕</span> Annuler
     </button>
     <button class="btn btn-valider" (click)="valider()" [disabled]="saving">
-      <span class="check-icon">✓</span> Valider
+      <span class="check-icon">✓</span> {{ saving ? '...' : 'Valider' }}
     </button>
   </div>
 
@@ -29,29 +59,23 @@
         <td class="col-banque">
           <select [(ngModel)]="row.banqueX3" class="select-field">
             <option value=""></option>
-            <!-- <option *ngFor="let b of banquesX3"
-                    [value]="b.BAN_NUM ?? b.CPY ?? b.code ?? b">
-              {{ b.BAN_DES ?? b.CPYNAM ?? b.libelle ?? b }}
-            </option> -->
-            <option *ngFor="let b of banquesX3" [value]="b.BAN">
-  {{ b.PAB }}
-</option>
+            <option *ngFor="let b of banquesX3" [value]="b.BAN">{{ b.PAB }}</option>
           </select>
         </td>
         <td class="col-treso">
           <select [(ngModel)]="row.banqueTreso" class="select-field treso-select">
             <option value=""></option>
-            <option *ngFor="let t of banquesTreso"
-                    [value]="t.BPANAM ?? t.code ?? t">
+            <!-- <option *ngFor="let t of banquesTreso" [value]="t.BPANAM ?? t.code ?? t">
               {{ t.BPANAM ?? t.nom ?? t }}
-            </option>
+            </option> -->
+
+            <option *ngFor="let t of banquesTreso" [value]="t.CODE">
+  {{ t.DESCRIPTION }}
+</option>
           </select>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <!-- <button class="btn-add" (click)="addRow()">+ Ajouter une ligne</button> -->
-
 </div>
-

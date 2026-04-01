@@ -1,8 +1,89 @@
+/* ── Header (exact home.css style) ── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.left,
+.right {
+  width: 150px;
+  display: flex;
+  align-items: center;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.logo {
+  height: 40px;
+}
+
+.logout-icon {
+  height: 28px;
+  cursor: pointer;
+}
+
+.center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.menu {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+.menu-item {
+  position: relative;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.menu-item span:hover,
+.dropdown-title:hover {
+  color: var(--accent);
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 5px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-width: 200px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px 15px;
+}
+
+.dropdown-item:hover {
+  background: var(--bg);
+  color: var(--accent);
+}
+
+/* ── Banque content ── */
 .banque-container {
   font-family: Arial, sans-serif;
   font-size: 12px;
   background: #f0f0f0;
-  min-height: 100vh;
+  min-height: calc(100vh - 71px);
 }
 
 .toolbar {

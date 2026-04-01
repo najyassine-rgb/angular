@@ -1,3 +1,33 @@
+<!-- HEADER (exact home.html style) -->
+<div class="header">
+  <div class="left">
+    <img src="assets/logo-FMC.svg" class="logo" />
+  </div>
+  <div class="center">
+    <div class="menu">
+      <div class="menu-item" *ngFor="let item of menuItems">
+        <span *ngIf="!item.children" (click)="navigate(item.route)">
+          {{ item.label }}
+        </span>
+        <div class="dropdown" *ngIf="item.children">
+          <span class="dropdown-title">{{ item.label }} ▼</span>
+          <div class="dropdown-menu">
+            <div class="dropdown-item"
+                 *ngFor="let child of item.children"
+                 (click)="navigate(child.route)">
+              {{ child.label }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <img src="assets/logout.png" class="logout-icon" (click)="logout()" />
+  </div>
+</div>
+
+<!-- PAGE CONTENT -->
 <div class="libelle-container" (click)="closePopup()">
 
   <div class="top-bar">
@@ -46,7 +76,6 @@
 
     <div class="dialog-body">
 
-     <!-- Mode -->
       <div class="dialog-radios">
         <label class="radio-label">
           <input type="radio" name="dm" value="Transaction" [(ngModel)]="dialogMode"> Transaction
@@ -56,7 +85,6 @@
         </label>
       </div>
 
-      <!-- Opération -->
       <div class="field-row">
         <label>Opération</label>
         <div class="custom-select-wrap">
@@ -64,8 +92,7 @@
             <span>{{ selectedOperation || '' }}</span>
             <span class="arrow">▼</span>
           </div>
-          <div class="popup-dropdown" *ngIf="activePopup === 'operation'"
-               (click)="$event.stopPropagation()">
+          <div class="popup-dropdown" *ngIf="activePopup === 'operation'" (click)="$event.stopPropagation()">
             <table class="popup-table">
               <thead><tr><th>Key</th><th>Value</th></tr></thead>
               <tbody>
@@ -82,7 +109,6 @@
         </div>
       </div>
 
-<!-- Compte bancaire — always shown for both Transaction and Flux -->
       <div class="field-row">
         <label>Compte bancaire</label>
         <div class="custom-select-wrap">
@@ -90,8 +116,7 @@
             <span>{{ selectedCompte || '' }}</span>
             <span class="arrow">▼</span>
           </div>
-          <div class="popup-dropdown" *ngIf="activePopup === 'compte'"
-               (click)="$event.stopPropagation()">
+          <div class="popup-dropdown" *ngIf="activePopup === 'compte'" (click)="$event.stopPropagation()">
             <table class="popup-table">
               <thead><tr><th>Key</th><th>Value</th></tr></thead>
               <tbody>
@@ -108,10 +133,7 @@
         </div>
       </div>
 
-      <!-- Toolbar row -->
       <div class="toolbar-row">
-
-        <!-- Type dropdown -->
         <div class="custom-select-wrap tb">
           <div class="custom-select tb-sel" (click)="togglePopup('tbType', $event)">
             <span>{{ tbType }}</span><span class="arrow">▼</span>
@@ -129,10 +151,8 @@
           </div>
         </div>
 
-        <!-- Free text -->
         <input class="tb-input" [(ngModel)]="tbLibre" />
 
-        <!-- Align dropdown -->
         <div class="custom-select-wrap tb">
           <div class="custom-select tb-sel" (click)="togglePopup('tbAlign', $event)">
             <span>{{ tbAlign }}</span><span class="arrow">▼</span>
@@ -150,7 +170,6 @@
           </div>
         </div>
 
-        <!-- Champ dropdown -->
         <div class="custom-select-wrap tb">
           <div class="custom-select tb-sel" (click)="togglePopup('tbChamp', $event)">
             <span>{{ tbChamp }}</span><span class="arrow">▼</span>
@@ -173,7 +192,6 @@
         <button class="btn-icon btn-red sm">🗑</button>
       </div>
 
-   <!-- Detail table -->
       <table class="detail-table">
         <thead>
           <tr>
@@ -199,12 +217,14 @@
         </tbody>
       </table>
 
-      <!-- White preview area between table and Valider -->
       <div class="preview-area"></div>
 
       <div class="dialog-footer">
         <button class="btn-valider" (click)="valider()">
-          <img src="" alt="" class="check-img"/>
           <span class="check">✓</span> Valider
         </button>
       </div>
+
+    </div>
+  </div>
+</div>
