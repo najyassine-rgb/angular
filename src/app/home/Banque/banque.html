@@ -1,0 +1,57 @@
+<div class="banque-container">
+
+  <div class="toolbar">
+    <button class="btn btn-print" title="Imprimer">🖨️</button>
+    <button class="btn btn-annuler" (click)="annuler()">
+      <span class="x-icon">✕</span> Annuler
+    </button>
+    <button class="btn btn-valider" (click)="valider()" [disabled]="saving">
+      <span class="check-icon">✓</span> Valider
+    </button>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="col-pin"></th>
+        <th class="col-banque">Banque</th>
+        <th class="col-treso">Banque Treso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngIf="loadingX3 || loadingTreso">
+        <td colspan="3" class="loading-cell">Chargement...</td>
+      </tr>
+      <tr *ngFor="let row of rows; let i = index">
+        <td class="col-pin">
+          <button class="btn-pin" (click)="removeRow(i)" title="Supprimer">▼</button>
+        </td>
+        <td class="col-banque">
+          <select [(ngModel)]="row.banqueX3" class="select-field">
+            <option value=""></option>
+            <!-- <option *ngFor="let b of banquesX3"
+                    [value]="b.BAN_NUM ?? b.CPY ?? b.code ?? b">
+              {{ b.BAN_DES ?? b.CPYNAM ?? b.libelle ?? b }}
+            </option> -->
+            <option *ngFor="let b of banquesX3" [value]="b.BAN">
+  {{ b.PAB }}
+</option>
+          </select>
+        </td>
+        <td class="col-treso">
+          <select [(ngModel)]="row.banqueTreso" class="select-field treso-select">
+            <option value=""></option>
+            <option *ngFor="let t of banquesTreso"
+                    [value]="t.BPANAM ?? t.code ?? t">
+              {{ t.BPANAM ?? t.nom ?? t }}
+            </option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- <button class="btn-add" (click)="addRow()">+ Ajouter une ligne</button> -->
+
+</div>
+

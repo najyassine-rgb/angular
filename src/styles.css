@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --primary: #1A73E8;
+  --primary-dark: #0A2540;
+
+  --accent: #00A86B;        /* vert FMC */
+  --accent-dark: #007A4E;
+
+  --bg: #F5F7FA;
+  --white: #FFFFFF;
+  --text: #1F2937;
+  --border: #E5E7EB;
+  --error: #EF4444;
+}
+
+/* GLOBAL */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* TITRES (comme FMC) */
+h1, h2, h3 {
+  color: var(--primary-dark);
+  font-weight: 600;
+}
+
+/* INPUT GLOBAL */
+input {
+  width: 100%;
+  padding: 11px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+/* BUTTON GLOBAL */
+button {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  border: none;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+/* button:hover {
+  background: var(--accent);
+} */
+
+/* bouton principal uniquement */
+.btn-primary {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  border: none;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+
+.btn-primary:hover {
+  background: var(--accent); /* vert uniquement ici */
+}
+
+/* LINK STYLE */
+.link {
+  background: none;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.link:hover {
+  color: var(--accent);
+}

@@ -1,0 +1,42 @@
+  <div class="modal">
+
+    <!-- HEADER -->
+    <div class="modal-header">
+      <h2>Société</h2>
+
+      <button class="close-btn" (click)="close()">
+        ✕
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div class="modal-body">
+
+      <label>Société</label>
+
+      <select [(ngModel)]="selectedSociete">
+  <!-- <option *ngFor="let s of societes" [value]="s.code">
+    {{ s.label }}
+  </option> -->
+  <option *ngFor="let s of societes" [value]="s.CPY">
+  {{ s.CPYNAM }}
+</option>
+</select>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="modal-footer">
+
+      <button class="btn cancel" (click)="close()">
+        Annuler
+      </button>
+
+      <button class="btn primary" (click)="validate()">
+        Valider
+      </button>
+
+    </div>
+
+  </div>
+

@@ -1,0 +1,51 @@
+<div class="header">
+
+  <!-- LOGO -->
+  <div class="left">
+    <img src="assets/logo-FMC.svg" class="logo" />
+  </div>
+
+  <!-- MENU CENTRÉ -->
+  <div class="center">
+    <div class="menu">
+      <div class="menu-item" *ngFor="let item of menuItems">
+
+        <!-- SIMPLE -->
+        <span *ngIf="!item.children" (click)="navigate(item.route)">
+          {{ item.label }}
+        </span>
+
+        <!-- DROPDOWN -->
+        <div class="dropdown" *ngIf="item.children">
+          <span class="dropdown-title">
+            {{ item.label }} ▼
+          </span>
+
+          <div class="dropdown-menu">
+            <div
+              class="dropdown-item"
+              *ngFor="let child of item.children"
+              (click)="navigate(child.route)"
+            >
+              {{ child.label }}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGOUT -->
+  <div class="right">
+    <img
+      src="assets/logout.png"
+      class="logout-icon"
+      (click)="logout()"
+    />
+  </div>
+
+</div>
+
+
+<router-outlet></router-outlet>

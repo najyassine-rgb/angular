@@ -1,0 +1,210 @@
+<div class="libelle-container" (click)="closePopup()">
+
+  <div class="top-bar">
+    <div class="radio-group">
+      <label class="radio-label">
+        <input type="radio" name="mode" value="Transaction" [(ngModel)]="mode"> Transaction
+      </label>
+      <label class="radio-label">
+        <input type="radio" name="mode" value="Flux" [(ngModel)]="mode"> Flux
+      </label>
+    </div>
+    <div class="action-btns">
+      <button class="btn-icon btn-green" title="Ajouter" (click)="openDialog()">＋</button>
+      <button class="btn-icon btn-red" title="Supprimer">🗑</button>
+    </div>
+  </div>
+
+  <div class="group-bar">Drag a column header here to group by that column</div>
+
+  <table class="main-table">
+    <thead>
+      <tr>
+        <th class="col-pin"></th>
+        <th class="col-flux">Flux <span class="filter-icon">▼</span></th>
+        <th class="col-compte">Compte bancaire</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of rows; let i = index">
+        <td class="col-pin"><span class="pin">▼</span></td>
+        <td>{{ row.flux }}</td>
+        <td>{{ row.compteBancaire }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Dialog -->
+<div class="overlay" *ngIf="showDialog" (click)="closePopup()">
+  <div class="dialog" (click)="$event.stopPropagation()">
+
+    <div class="dialog-title">
+      <span>Libellé</span>
+      <button class="btn-close" (click)="closeDialog()">✕</button>
+    </div>
+
+    <div class="dialog-body">
+
+     <!-- Mode -->
+      <div class="dialog-radios">
+        <label class="radio-label">
+          <input type="radio" name="dm" value="Transaction" [(ngModel)]="dialogMode"> Transaction
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="dm" value="Flux" [(ngModel)]="dialogMode"> Flux
+        </label>
+      </div>
+
+      <!-- Opération -->
+      <div class="field-row">
+        <label>Opération</label>
+        <div class="custom-select-wrap">
+          <div class="custom-select" (click)="togglePopup('operation', $event)">
+            <span>{{ selectedOperation || '' }}</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="popup-dropdown" *ngIf="activePopup === 'operation'"
+               (click)="$event.stopPropagation()">
+            <table class="popup-table">
+              <thead><tr><th>Key</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td></td><td></td></tr>
+                <tr *ngFor="let o of currentOperationOptions"
+                    [class.selected]="selectedOperation === o.key"
+                    (click)="selectOperation(o.key)">
+                  <td>{{ o.key }}</td><td>{{ o.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="popup-close" (click)="closePopup()">✕</div>
+          </div>
+        </div>
+      </div>
+
+<!-- Compte bancaire — always shown for both Transaction and Flux -->
+      <div class="field-row">
+        <label>Compte bancaire</label>
+        <div class="custom-select-wrap">
+          <div class="custom-select" (click)="togglePopup('compte', $event)">
+            <span>{{ selectedCompte || '' }}</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="popup-dropdown" *ngIf="activePopup === 'compte'"
+               (click)="$event.stopPropagation()">
+            <table class="popup-table">
+              <thead><tr><th>Key</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td></td><td></td></tr>
+                <tr *ngFor="let c of compteOptions"
+                    [class.selected]="selectedCompte === c.key"
+                    (click)="selectCompte(c.key)">
+                  <td>{{ c.key }}</td><td>{{ c.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="popup-close" (click)="closePopup()">✕</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toolbar row -->
+      <div class="toolbar-row">
+
+        <!-- Type dropdown -->
+        <div class="custom-select-wrap tb">
+          <div class="custom-select tb-sel" (click)="togglePopup('tbType', $event)">
+            <span>{{ tbType }}</span><span class="arrow">▼</span>
+          </div>
+          <div class="popup-dropdown sm" *ngIf="activePopup === 'tbType'" (click)="$event.stopPropagation()">
+            <table class="popup-table">
+              <thead><tr><th colspan="2">Value</th></tr></thead>
+              <tbody>
+                <tr *ngFor="let t of typeOptions" (click)="selectTbType(t.key)">
+                  <td colspan="2">{{ t.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="popup-close" (click)="closePopup()">✕</div>
+          </div>
+        </div>
+
+        <!-- Free text -->
+        <input class="tb-input" [(ngModel)]="tbLibre" />
+
+        <!-- Align dropdown -->
+        <div class="custom-select-wrap tb">
+          <div class="custom-select tb-sel" (click)="togglePopup('tbAlign', $event)">
+            <span>{{ tbAlign }}</span><span class="arrow">▼</span>
+          </div>
+          <div class="popup-dropdown sm" *ngIf="activePopup === 'tbAlign'" (click)="$event.stopPropagation()">
+            <table class="popup-table">
+              <thead><tr><th colspan="2">Value</th></tr></thead>
+              <tbody>
+                <tr *ngFor="let a of alignOptions" (click)="selectTbAlign(a.key)">
+                  <td colspan="2">{{ a.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="popup-close" (click)="closePopup()">✕</div>
+          </div>
+        </div>
+
+        <!-- Champ dropdown -->
+        <div class="custom-select-wrap tb">
+          <div class="custom-select tb-sel" (click)="togglePopup('tbChamp', $event)">
+            <span>{{ tbChamp }}</span><span class="arrow">▼</span>
+          </div>
+          <div class="popup-dropdown sm right" *ngIf="activePopup === 'tbChamp'" (click)="$event.stopPropagation()">
+            <table class="popup-table two-col">
+              <thead><tr><th>Key</th><th>Value</th></tr></thead>
+              <tbody>
+                <tr><td></td><td></td></tr>
+                <tr *ngFor="let c of champOptions" (click)="selectTbChamp(c.key)">
+                  <td>{{ c.key }}</td><td>{{ c.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="popup-close" (click)="closePopup()">✕</div>
+          </div>
+        </div>
+
+        <button class="btn-icon btn-green sm" (click)="addDetailRow()">＋</button>
+        <button class="btn-icon btn-red sm">🗑</button>
+      </div>
+
+   <!-- Detail table -->
+      <table class="detail-table">
+        <thead>
+          <tr>
+            <th class="pin-col"></th>
+            <th>Type</th>
+            <th>Libre</th>
+            <th>Formule</th>
+            <th>Champ</th>
+            <th>Nb cara.</th>
+            <th>Format date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of details; let i = index">
+            <td class="pin-col"><span class="pin">▼</span></td>
+            <td><input class="cell-input" [(ngModel)]="d.type" /></td>
+            <td><input class="cell-input" [(ngModel)]="d.libre" /></td>
+            <td><input class="cell-input" [(ngModel)]="d.formule" /></td>
+            <td><input class="cell-input" [(ngModel)]="d.champ" /></td>
+            <td><input class="cell-input" [(ngModel)]="d.nbCara" /></td>
+            <td><input class="cell-input" [(ngModel)]="d.formatDate" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- White preview area between table and Valider -->
+      <div class="preview-area"></div>
+
+      <div class="dialog-footer">
+        <button class="btn-valider" (click)="valider()">
+          <img src="" alt="" class="check-img"/>
+          <span class="check">✓</span> Valider
+        </button>
+      </div>

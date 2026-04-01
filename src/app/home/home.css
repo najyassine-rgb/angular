@@ -1,0 +1,99 @@
+/* HEADER GLOBAL */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 30px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+/* LEFT / RIGHT */
+.left,
+.right {
+  width: 150px; /* équilibre visuel */
+  display: flex;
+  align-items: center;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+/* LOGO */
+.logo {
+  height: 40px;
+}
+
+/* LOGOUT */
+.logout-icon {
+  height: 28px;
+  cursor: pointer;
+}
+
+/* CENTER MENU */
+.center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* MENU */
+.menu {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+}
+
+/* ITEM */
+.menu-item {
+  position: relative;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* .dropdown{
+    position: relative;
+    padding-bottom: 10px;
+} */
+
+/* HOVER FMC */
+.menu-item span:hover,
+.dropdown-title:hover {
+  color: var(--accent);
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%; /* 👈 clé du fix */
+  left: 0;
+  margin-top: 5px; /* petit espace visuel */
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  min-width: 200px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+
+
+/* SHOW */
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+
+
+
+
+/* ITEMS */
+.dropdown-item {
+  padding: 10px 15px;
+}
+
+.dropdown-item:hover {
+  background: var(--bg);
+  color: var(--accent);
+}
