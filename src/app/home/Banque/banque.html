@@ -1,20 +1,15 @@
-<!-- HEADER (same as home) -->
 <div class="header">
   <div class="left">
-    <img src="assets/logo-FMC.svg" class="logo" />
+    <img src="assets/logo-FMC.svg" class="logo" (click)="navigate('/home')" />
   </div>
   <div class="center">
     <div class="menu">
       <div class="menu-item" *ngFor="let item of menuItems">
-        <span *ngIf="!item.children" (click)="navigate(item.route)">
-          {{ item.label }}
-        </span>
+        <span *ngIf="!item.children" (click)="navigate(item.route)">{{ item.label }}</span>
         <div class="dropdown" *ngIf="item.children">
           <span class="dropdown-title">{{ item.label }} ▼</span>
           <div class="dropdown-menu">
-            <div class="dropdown-item"
-                 *ngFor="let child of item.children"
-                 (click)="navigate(child.route)">
+            <div class="dropdown-item" *ngFor="let child of item.children" (click)="navigate(child.route)">
               {{ child.label }}
             </div>
           </div>
@@ -27,55 +22,56 @@
   </div>
 </div>
 
-<!-- BANQUE CONTENT -->
-<div class="banque-container">
+<div class="page-container">
 
-  <div class="toolbar">
-    <button class="btn btn-print" title="Imprimer">🖨️</button>
-    <button class="btn btn-annuler" (click)="annuler()">
-      <span class="x-icon">✕</span> Annuler
-    </button>
-    <button class="btn btn-valider" (click)="valider()" [disabled]="saving">
-      <span class="check-icon">✓</span> {{ saving ? '...' : 'Valider' }}
-    </button>
+  <div class="page-header">
+    <div class="page-title">
+      <h1>Correspondance Banque</h1>
+      <!-- <p>Associez vos banques Sage X3 aux banques de trésorerie</p> -->
+    </div>
+    <div class="page-actions">
+      <button class="action-btn btn-secondary" (click)="annuler()">
+        <span>✕</span> Annuler
+      </button>
+      <button class="action-btn btn-primary" (click)="valider()" [disabled]="saving">
+        <span>✓</span> {{ saving ? 'Enregistrement...' : 'Valider' }}
+      </button>
+    </div>
   </div>
 
-  <table>
-    <thead>
-      <tr>
-        <th class="col-pin"></th>
-        <th class="col-banque">Banque</th>
-        <th class="col-treso">Banque Treso</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngIf="loadingX3 || loadingTreso">
-        <td colspan="3" class="loading-cell">Chargement...</td>
-      </tr>
-      <tr *ngFor="let row of rows; let i = index">
-        <td class="col-pin">
-          <button class="btn-pin" (click)="removeRow(i)" title="Supprimer">▼</button>
-        </td>
-        <td class="col-banque">
-          <select [(ngModel)]="row.banqueX3" class="select-field">
-            <option value=""></option>
+  <div class="card">
+    <div class="card-header">
+      <div class="col-label">Banque X3</div>
+      <div class="col-label">Banque Trésorerie</div>
+      <div class="col-actions"></div>
+    </div>
+
+    <div class="card-body">
+      <div class="mapping-row" *ngFor="let row of rows; let i = index">
+        <div class="mapping-col">
+          <select [(ngModel)]="row.banqueX3" class="modern-select">
+            <option value="">— Sélectionner une banque —</option>
             <option *ngFor="let b of banquesX3" [value]="b.BAN">{{ b.PAB }}</option>
           </select>
-        </td>
-        <td class="col-treso">
-          <select [(ngModel)]="row.banqueTreso" class="select-field treso-select">
-            <option value=""></option>
-            <!-- <option *ngFor="let t of banquesTreso" [value]="t.BPANAM ?? t.code ?? t">
-              {{ t.BPANAM ?? t.nom ?? t }}
-            </option> -->
-
-            <option *ngFor="let t of banquesTreso" [value]="t.CODE">
-  {{ t.DESCRIPTION }}
-</option>
+        </div>
+        <div class="mapping-arrow">→</div>
+        <div class="mapping-col">
+          <select [(ngModel)]="row.banqueTreso" class="modern-select treso">
+            <option value="">— Sélectionner une banque —</option>
+            <option *ngFor="let t of banquesTreso" [value]="t.CODE">{{ t.DESCRIPTION }}</option>
           </select>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+        </div>
+        <div class="mapping-delete">
+          <button class="btn-delete" (click)="removeRow(i)" title="Supprimer">✕</button>
+        </div>
+      </div>
+
+      <div class="add-row">
+        <button class="btn-add-row" (click)="addRow()">
+          + Ajouter une correspondance
+        </button>
+      </div>
+    </div>
+  </div>
 
 </div>

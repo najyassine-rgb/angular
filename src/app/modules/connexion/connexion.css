@@ -1,4 +1,4 @@
-/* ── Header (exact home.css style) ── */
+/* ── Header ── */
 .header {
   display: flex;
   align-items: center;
@@ -14,42 +14,48 @@
   width: 150px;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
 }
 
-.right {
-  justify-content: flex-end;
-}
+.right { justify-content: flex-end; }
 
 .logo {
   height: 40px;
-}
-
-.logout-icon {
-  height: 28px;
   cursor: pointer;
 }
 
+.logout-icon { height: 28px; cursor: pointer; }
+
 .center {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
 }
 
 .menu {
   display: flex;
-  gap: 40px;
+  gap: 30px;
   align-items: center;
+  white-space: nowrap;
 }
 
 .menu-item {
   position: relative;
   font-weight: 500;
   cursor: pointer;
+  font-size: 14px;
+  display: flex;       
+  align-items: center;   
 }
 
 .menu-item span:hover,
-.dropdown-title:hover {
-  color: var(--accent);
+.dropdown-title:hover { color: var(--accent); }
+
+.dropdown {
+  position: relative;
+  display: flex;       
+  align-items: center;   
 }
 
 .dropdown-menu {
@@ -57,26 +63,18 @@
   position: absolute;
   top: 100%;
   left: 0;
-  margin-top: 5px;
+  margin-top: 0;
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 8px;
   min-width: 200px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  z-index: 999;
 }
 
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-.dropdown-item {
-  padding: 10px 15px;
-}
-
-.dropdown-item:hover {
-  background: var(--bg);
-  color: var(--accent);
-}
+.dropdown:hover .dropdown-menu { display: block; }
+.dropdown-item { padding: 10px 15px; }
+.dropdown-item:hover { background: var(--bg); color: var(--accent); }
 
 /* ── Page content (your original style) ── */
 .connexion-page {

@@ -14,22 +14,44 @@ export class HomeComponent {
   //   menuItems: string[] = ['Connexion', 'Configuration', 'Paramétrage Correspondance', 'Traitement'];
  
  
+  // menuItems = [
+  //   // { label: 'Connexion', route: '/home' },
+  //   { label: 'Connexion', route: '/connexion' },
+  //   { label: 'Configuration', route: '/config' },
+  //   {
+  //     label: 'Paramétrage Correspondance',
+  //     children: [
+  //       { label: 'Devise', route: '/devise' },
+  //       { label: 'Banque', route: '/banque' },
+  //       { label: 'Compte Bancaire', route: '/compte' },
+  //       { label: 'Flux', route: '/flux' },
+  //       { label: 'Paramétrage Libellé', route: '/libelle' },
+  //     ],
+  //   },
+  //   { label: 'Traitement', route: '/traitement' },
+  // ];
+
+
   menuItems = [
-    // { label: 'Connexion', route: '/home' },
-    { label: 'Connexion', route: '/connexion' },
-    { label: 'Configuration', route: '/config' },
-    {
-      label: 'Paramétrage Correspondance',
-      children: [
-        { label: 'Devise', route: '/devise' },
-        { label: 'Banque', route: '/banque' },
-        { label: 'Compte Bancaire', route: '/compte' },
-        { label: 'Flux', route: '/flux' },
-        { label: 'Paramétrage Libellé', route: '/libelle' },
-      ],
-    },
-    { label: 'Traitement', route: '/traitement' },
-  ];
+  { label: 'Connexion', route: '/connexion' },
+  { label: 'Configuration', route: '/config' },
+  {
+    label: 'Correspondance',
+    children: [
+      { label: 'Devise',          route: '/devise' },
+      { label: 'Banque',          route: '/banque' },
+      { label: 'Compte Bancaire', route: '/compte' },
+      { label: 'Flux',            route: '/flux' },
+    ],
+  },
+  {
+    label: 'Paramétrage',
+    children: [
+      { label: 'Paramétrage Libellé', route: '/libelle' },
+    ],
+  },
+  { label: 'Traitement', route: '/traitement' },
+];
 
 
 

@@ -1,8 +1,8 @@
 <!-- HEADER (same as home) -->
 <div class="header">
   <div class="left">
-    <img src="assets/logo-FMC.svg" class="logo" />
-  </div>
+  <img src="assets/logo-FMC.svg" class="logo" (click)="navigate('/home')" />
+</div>
   <div class="center">
     <div class="menu">
       <div class="menu-item" *ngFor="let item of menuItems">
@@ -36,7 +36,7 @@
       <button class="close-btn" (click)="close()">✕</button>
     </div>
 
-    <div class="modal-body">
+    <!-- <div class="modal-body">
       <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
       <label>Société</label>
       <select [(ngModel)]="selectedSociete">
@@ -45,7 +45,20 @@
           {{ s.CPYNAM }}
         </option>
       </select>
-    </div>
+    </div> -->
+
+    <div class="modal-body">
+  <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
+  <label>Société</label>
+  <select [(ngModel)]="selectedSociete" [disabled]="loading">
+    <option value="">
+      {{ loading ? 'Chargement...' : 'Sélectionnez une société' }}
+    </option>
+    <option *ngFor="let s of societes" [value]="s.CPY">
+      {{ s.CPYNAM }}
+    </option>
+  </select>
+</div>
 
     <div class="modal-footer">
       <button class="btn cancel" (click)="close()">Annuler</button>
