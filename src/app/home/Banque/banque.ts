@@ -27,6 +27,7 @@ export class BanqueComponent implements OnInit {
   banquesTreso: any[] = [];
   rows: CorrespondanceRow[] = [];
   selectedRowIndex: number | null = null;
+  editingIndex: number | null = null;
   showForm = false;
   saving = false;
 
@@ -152,12 +153,44 @@ export class BanqueComponent implements OnInit {
     this.selectedRowIndex = this.selectedRowIndex === index ? null : index;
   }
 
-  deleteSelectedRow(): void {
-    if (this.selectedRowIndex === null) return;
-    this.rows.splice(this.selectedRowIndex, 1);
-    this.selectedRowIndex = null;
-    this.saveToBackend();
-  }
+
+  editRow(index: number): void {
+  const row = this.rows[index];
+
+  this.editingIndex = index;
+  this.newBanqueX3 = row.banqueX3;
+  this.newBanqueTreso = row.banqueTreso;
+
+  this.showForm = true;
+}
+
+
+deleteRow(index: number): void {
+  if (!confirm('Supprimer cette correspondance ?')) return;
+
+  this.rows.splice(index, 1);
+  this.saveToBackend();
+}
+
+deleteSelectedRow(): void {
+  if (this.selectedRowIndex === null) return;
+
+  if (!confirm('Supprimer la ligne sélectionnée ?')) return;
+
+  this.rows.splice(this.selectedRowIndex, 1);
+  this.selectedRowIndex = null;
+
+  this.saveToBackend();
+}
+
+deleteAllRows(): void {
+  if (!confirm('⚠️ Supprimer toutes les correspondances ?')) return;
+
+  this.rows = [];
+  this.selectedRowIndex = null;
+
+  this.saveToBackend();
+}
 
   openForm(): void {
     this.newBanqueX3 = '';
@@ -169,12 +202,23 @@ export class BanqueComponent implements OnInit {
     this.showForm = false;
   }
 
-  addCorrespondance(): void {
-    if (!this.newBanqueX3 || !this.newBanqueTreso) {
-      this.showToast('Veuillez sélectionner les deux banques', 'error');
-      return;
-    }
+ addCorrespondance(): void {
+  if (!this.newBanqueX3 || !this.newBanqueTreso) {
+    this.showToast('Veuillez sélectionner les deux banques', 'error');
+    return;
+  }
 
+  const newRow: CorrespondanceRow = {
+    banqueX3: this.newBanqueX3,
+    banqueTreso: this.newBanqueTreso,
+    banqueX3Nom: this.getX3Nom(this.newBanqueX3, this.banquesX3),
+    banqueTresoNom: this.getTresoNom(this.newBanqueTreso, this.banquesTreso),
+  };
+
+  if (this.editingIndex !== null) {
+    this.rows[this.editingIndex] = newRow;
+    this.editingIndex = null;
+  } else {
     const exists = this.rows.some(
       r => r.banqueX3 === this.newBanqueX3 && r.banqueTreso === this.newBanqueTreso
     );
@@ -184,16 +228,12 @@ export class BanqueComponent implements OnInit {
       return;
     }
 
-    this.rows.push({
-      banqueX3:      this.newBanqueX3,
-      banqueTreso:   this.newBanqueTreso,
-      banqueX3Nom:   this.getX3Nom(this.newBanqueX3, this.banquesX3),
-      banqueTresoNom: this.getTresoNom(this.newBanqueTreso, this.banquesTreso),
-    });
-
-    this.closeForm();
-    this.saveToBackend();
+    this.rows.push(newRow);
   }
+
+  this.closeForm();
+  this.saveToBackend();
+}
 
   private saveToBackend(): void {
     this.saving = true;

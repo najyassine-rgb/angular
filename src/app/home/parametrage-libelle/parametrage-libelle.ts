@@ -39,7 +39,7 @@ export class ParametrageLibelleComponent implements OnInit {
   showDetailPanel = false;
   selectedRowDetails: LibelleDetail[] = [];
   selectedRowFlux = '';
-
+editingIndex: number | null = null;
   dialogMode: 'Transaction' | 'Flux' = 'Transaction';
   selectedOperation = '';
   selectedOperationLibelle = '';
@@ -195,20 +195,34 @@ export class ParametrageLibelleComponent implements OnInit {
   }
 
   // ── Dialog ────────────────────────────────────────
-  openDialog(): void {
-    this.dialogMode = 'Transaction';
-    this.selectedOperation = '';
-    this.selectedOperationLibelle = '';
-    this.selectedCompte = '';
-    this.details = [];
-    this.resetBuilder();
-    this.showDialog = true;
-  }
+ openDialog(): void {
+  this.editingIndex = null; // NEW
+  this.dialogMode = 'Transaction';
+  this.selectedOperation = '';
+  this.selectedOperationLibelle = '';
+  this.selectedCompte = '';
+  this.details = [];
+  this.resetBuilder();
+  this.showDialog = true;
+}
 
   closeDialog(): void {
     this.showDialog = false;
     this.activePopup = null;
   }
+
+  editRow(index: number): void {
+  const row = this.rows[index];
+
+  this.editingIndex = index;
+
+  this.dialogMode = row.dialogMode as any;
+  this.selectedOperationLibelle = row.flux;
+  this.selectedCompte = row.compteBancaire;
+  this.details = JSON.parse(JSON.stringify(row.details)); // clone
+
+  this.showDialog = true;
+}
 
   // ── Popup ─────────────────────────────────────────
   togglePopup(name: string, event: MouseEvent): void {
@@ -301,25 +315,125 @@ export class ParametrageLibelleComponent implements OnInit {
     this.showDetailPanel = true;
   }
 
-  deleteSelectedRow(): void {
-    if (this.selectedRowIndex !== null && this.rows.length > 0) {
-      this.rows.splice(this.selectedRowIndex, 1);
+deleteRow(index: number): void {
+  if (!confirm('Supprimer cette ligne ?')) return;
+
+  this.rows.splice(index, 1);
+
+  if (this.selectedRowIndex === index) {
+    this.selectedRowIndex = null;
+    this.showDetailPanel = false;
+  }
+
+  this.saveRows();
+}
+
+
+deleteSelectedRow(): void {
+  if (this.selectedRowIndex === null) return;
+
+  if (!confirm('Supprimer la ligne sélectionnée ?')) return;
+
+  this.rows.splice(this.selectedRowIndex, 1);
+
+  this.selectedRowIndex = null;
+  this.showDetailPanel = false;
+  this.selectedRowDetails = [];
+
+  this.saveRows();
+}
+
+
+
+confirmDialog = {
+  visible: false,
+  message: '',
+  action: null as null | (() => void)
+};
+
+openConfirm(message: string, action: () => void): void {
+  this.confirmDialog = {
+    visible: true,
+    message,
+    action
+  };
+}
+
+confirmYes(): void {
+  if (this.confirmDialog.action) {
+    this.confirmDialog.action();
+  }
+  this.confirmDialog.visible = false;
+}
+
+confirmNo(): void {
+  this.confirmDialog.visible = false;
+}
+
+deleteAllRows(): void {
+
+  if (this.rows.length === 0) {
+    this.showToast('Aucune ligne à supprimer', 'error');
+    return;
+  }
+
+  this.openConfirm(
+    ' Supprimer TOUTES les lignes ?',
+    () => {
+      const backup = [...this.rows];
+
+      this.rows = [];
       this.selectedRowIndex = null;
       this.showDetailPanel = false;
       this.selectedRowDetails = [];
+
       this.saveRows();
+
+      this.showToast('Supprimé (Annuler possible)', 'error');
+
+      setTimeout(() => {
+        backup.length = 0;
+      }, 5000);
     }
+  );
+}
+
+toast: { message: string; type: 'success' | 'error' } | null = null;
+private toastTimer: any;
+
+showToast(message: string, type: 'success' | 'error'): void {
+  if (this.toastTimer) {
+    clearTimeout(this.toastTimer);
   }
 
+  this.toast = { message, type };
+
+  this.toastTimer = setTimeout(() => {
+    this.toast = null;
+  }, 3000);
+}
+
   // ── Valider ───────────────────────────────────────
-  valider(): void {
-    this.rows.push({
-      flux: this.selectedOperationLibelle || this.selectedOperation,
-      compteBancaire: this.selectedCompte,
-      details: [...this.details],
-      dialogMode: this.dialogMode,
-    });
-    this.saveRows();
-    this.closeDialog();
+ valider(): void {
+
+  const newRow: LibelleRow = {
+    flux: this.selectedOperationLibelle || this.selectedOperation,
+    compteBancaire: this.selectedCompte,
+    details: [...this.details],
+    dialogMode: this.dialogMode,
+  };
+
+  // EDIT MODE
+  if (this.editingIndex !== null) {
+    this.rows[this.editingIndex] = newRow;
+    this.editingIndex = null;
+  } else {
+    this.rows.push(newRow);
   }
+
+  this.saveRows();
+  this.closeDialog();
+}
+
+
 }

@@ -29,30 +29,34 @@
       <h1 class="page-title">Paramétrage Libellé</h1>
       <p class="page-subtitle">Configurez les libellés de transactions et de flux bancaires</p>
     </div>
-    <div class="top-actions">
-      <div class="segment-control">
-        <button class="segment-btn" [class.active]="mode === 'Transaction'" (click)="mode = 'Transaction'">Transaction</button>
-        <button class="segment-btn" [class.active]="mode === 'Flux'" (click)="mode = 'Flux'">Flux</button>
-      </div>
-      <button class="btn-icon-action danger"
-              title="Supprimer"
-              (click)="deleteSelectedRow()"
-              [disabled]="selectedRowIndex === null">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
-          <path d="M10 11v6M14 11v6"/>
-          <path d="M9 6V4h6v2"/>
-        </svg>
-      </button>
-      <button class="btn-add-main" (click)="openDialog()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="12" y1="5" x2="12" y2="19"/>
-          <line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-        Ajouter
-      </button>
-    </div>
+  <div class="top-actions">
+
+  <div class="segment-control">
+    <button class="segment-btn" [class.active]="mode === 'Transaction'" (click)="mode = 'Transaction'">Transaction</button>
+    <button class="segment-btn" [class.active]="mode === 'Flux'" (click)="mode = 'Flux'">Flux</button>
+  </div>
+
+   <!-- DELETE ALL -->
+  <button class="btn-icon-action danger"
+          title="Supprimer tout"
+          (click)="deleteAllRows()"
+      >
+    🗑
+  </button>
+
+  <!-- DELETE SELECTED -->
+  <!-- <button class="btn-icon-action danger"
+          title="Supprimer"
+          (click)="deleteSelectedRow()"
+          [disabled]="selectedRowIndex === null || saving">
+    🗑
+  </button> -->
+
+  <button class="btn-add-main" (click)="openDialog()">
+    + Ajouter
+  </button>
+
+</div>
   </div>
 
   <!-- Main table -->
@@ -68,14 +72,40 @@
       <span>Cliquez sur Ajouter pour créer une correspondance</span>
     </div>
 
-    <div class="data-row"
-         *ngFor="let row of rows; let i = index"
-         [class.selected-row]="selectedRowIndex === i"
-         (click)="selectRow(i)">
-      <div class="row-indicator"></div>
-      <span class="flux-col">{{ row.flux }}</span>
-      <span class="compte-col">{{ row.compteBancaire }}</span>
-    </div>
+   <div class="data-row"
+     *ngFor="let row of rows; let i = index"
+     [class.selected-row]="selectedRowIndex === i">
+
+  <div class="row-indicator"></div>
+
+  <span class="flux-col" (click)="selectRow(i)">
+    {{ row.flux }}
+  </span>
+
+  <span class="compte-col" (click)="selectRow(i)">
+    {{ row.compteBancaire }}
+  </span>
+
+  <!-- ACTIONS -->
+  <span style="display:flex; gap:6px;">
+
+    <!-- EDIT -->
+    <button class="row-delete-btn"
+            title="Modifier"
+            (click)="editRow(i); $event.stopPropagation()">
+      ✏️
+    </button>
+
+    <!-- DELETE -->
+    <button class="row-delete-btn"
+            title="Supprimer"
+            (click)="deleteRow(i); $event.stopPropagation()">
+      🗑
+    </button>
+
+  </span>
+
+</div>
   </div>
 
   <!-- Detail panel -->
@@ -385,6 +415,27 @@
         </svg>
         Valider
       </button>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+<!-- CONFIRM MODAL -->
+<div class="confirm-backdrop" *ngIf="confirmDialog.visible">
+  <div class="confirm-box">
+
+    <!-- <div class="confirm-icon">⚠️</div> -->
+
+    <div class="confirm-message">
+      {{ confirmDialog.message }}
+    </div>
+
+    <div class="confirm-actions">
+      <button class="btn-cancel" (click)="confirmNo()">Annuler</button>
+      <button class="btn-danger" (click)="confirmYes()">Supprimer</button>
     </div>
 
   </div>

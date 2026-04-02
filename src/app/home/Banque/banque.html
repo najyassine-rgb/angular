@@ -40,26 +40,29 @@
       <h1>Correspondance Banque</h1>
       <p>Associez vos banques Sage X3 aux banques de trésorerie</p>
     </div>
-    <div class="page-actions">
-      <button class="btn-icon-action danger"
-              title="Supprimer"
-              (click)="deleteSelectedRow()"
-              [disabled]="selectedRowIndex === null || saving">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="3 6 5 6 21 6"/>
-          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
-          <path d="M10 11v6M14 11v6"/>
-          <path d="M9 6V4h6v2"/>
-        </svg>
-      </button>
-      <button class="btn-add-main" (click)="openForm()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="12" y1="5" x2="12" y2="19"/>
-          <line x1="5" y1="12" x2="19" y2="12"/>
-        </svg>
-        Ajouter
-      </button>
-    </div>
+   <div class="page-actions">
+
+  <!-- DELETE ALL -->
+  <button class="btn-icon-action danger"
+          title="Supprimer tout"
+          (click)="deleteAllRows()"
+      >
+    🗑
+  </button>
+
+  <!-- DELETE SELECTED -->
+  <!-- <button class="btn-icon-action danger"
+          title="Supprimer"
+          (click)="deleteSelectedRow()"
+          [disabled]="selectedRowIndex === null || saving">
+    🗑
+  </button> -->
+
+  <button class="btn-add-main" (click)="openForm()">
+    + Ajouter
+  </button>
+
+</div>
   </div>
 
   <!-- List card -->
@@ -75,14 +78,38 @@
       <span>Cliquez sur Ajouter pour créer une correspondance</span>
     </div>
 
-    <div class="data-row"
-         *ngFor="let row of rows; let i = index"
-         [class.selected-row]="selectedRowIndex === i"
-         (click)="selectRow(i)">
-      <div class="row-indicator"></div>
-      <span class="col-val">{{ row.banqueX3Nom || row.banqueX3 }}</span>
-      <span class="col-val treso-val">{{ row.banqueTresoNom || row.banqueTreso }}</span>
-    </div>
+   <div class="data-row"
+     *ngFor="let row of rows; let i = index"
+     [class.selected-row]="selectedRowIndex === i">
+
+  <div class="row-indicator"></div>
+
+  <span class="col-val" (click)="selectRow(i)">
+    {{ row.banqueX3Nom || row.banqueX3 }}
+  </span>
+
+  <span class="col-val treso-val" (click)="selectRow(i)">
+    {{ row.banqueTresoNom || row.banqueTreso }}
+  </span>
+
+  <!-- ACTIONS -->
+  <span style="display:flex; gap:6px;">
+
+    <!-- EDIT -->
+    <button class="row-delete-btn"
+            (click)="editRow(i); $event.stopPropagation()">
+      ✏️
+    </button>
+
+    <!-- DELETE -->
+    <button class="row-delete-btn"
+            (click)="deleteRow(i); $event.stopPropagation()">
+      🗑
+    </button>
+
+  </span>
+
+</div>
   </div>
 
 </div>
