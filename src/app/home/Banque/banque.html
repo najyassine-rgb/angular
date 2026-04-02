@@ -9,7 +9,9 @@
         <div class="dropdown" *ngIf="item.children">
           <span class="dropdown-title">{{ item.label }} ▼</span>
           <div class="dropdown-menu">
-            <div class="dropdown-item" *ngFor="let child of item.children" (click)="navigate(child.route)">
+            <div class="dropdown-item"
+                 *ngFor="let child of item.children"
+                 (click)="navigate(child.route)">
               {{ child.label }}
             </div>
           </div>
@@ -22,56 +24,112 @@
   </div>
 </div>
 
+<!-- Toast -->
+<div class="toast" *ngIf="toast"
+     [class.toast-success]="toast.type === 'success'"
+     [class.toast-error]="toast.type === 'error'">
+  <span class="toast-icon">{{ toast.type === 'success' ? '✓' : '✕' }}</span>
+  <span class="toast-message">{{ toast.message }}</span>
+</div>
+
 <div class="page-container">
 
+  <!-- Page header -->
   <div class="page-header">
     <div class="page-title">
       <h1>Correspondance Banque</h1>
-      <!-- <p>Associez vos banques Sage X3 aux banques de trésorerie</p> -->
+      <p>Associez vos banques Sage X3 aux banques de trésorerie</p>
     </div>
     <div class="page-actions">
-      <button class="action-btn btn-secondary" (click)="annuler()">
-        <span>✕</span> Annuler
+      <button class="btn-icon-action danger"
+              title="Supprimer"
+              (click)="deleteSelectedRow()"
+              [disabled]="selectedRowIndex === null || saving">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/>
+          <path d="M10 11v6M14 11v6"/>
+          <path d="M9 6V4h6v2"/>
+        </svg>
       </button>
-      <button class="action-btn btn-primary" (click)="valider()" [disabled]="saving">
-        <span>✓</span> {{ saving ? 'Enregistrement...' : 'Valider' }}
+      <button class="btn-add-main" (click)="openForm()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        Ajouter
       </button>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-header">
-      <div class="col-label">Banque X3</div>
-      <div class="col-label">Banque Trésorerie</div>
-      <div class="col-actions"></div>
+  <!-- List card -->
+  <div class="data-card">
+    <div class="data-table-header">
+      <span class="col-h">Banque X3</span>
+      <span class="col-h">Banque Trésorerie</span>
     </div>
 
-    <div class="card-body">
-      <div class="mapping-row" *ngFor="let row of rows; let i = index">
-        <div class="mapping-col">
-          <select [(ngModel)]="row.banqueX3" class="modern-select">
-            <option value="">— Sélectionner une banque —</option>
-            <option *ngFor="let b of banquesX3" [value]="b.BAN">{{ b.PAB }}</option>
-          </select>
-        </div>
-        <div class="mapping-arrow">→</div>
-        <div class="mapping-col">
-          <select [(ngModel)]="row.banqueTreso" class="modern-select treso">
-            <option value="">— Sélectionner une banque —</option>
-            <option *ngFor="let t of banquesTreso" [value]="t.CODE">{{ t.DESCRIPTION }}</option>
-          </select>
-        </div>
-        <div class="mapping-delete">
-          <button class="btn-delete" (click)="removeRow(i)" title="Supprimer">✕</button>
-        </div>
-      </div>
+    <div class="data-empty" *ngIf="rows.length === 0">
+      <div class="empty-icon">🏦</div>
+      <p>Aucune correspondance configurée</p>
+      <span>Cliquez sur Ajouter pour créer une correspondance</span>
+    </div>
 
-      <div class="add-row">
-        <button class="btn-add-row" (click)="addRow()">
-          + Ajouter une correspondance
-        </button>
-      </div>
+    <div class="data-row"
+         *ngFor="let row of rows; let i = index"
+         [class.selected-row]="selectedRowIndex === i"
+         (click)="selectRow(i)">
+      <div class="row-indicator"></div>
+      <span class="col-val">{{ row.banqueX3Nom || row.banqueX3 }}</span>
+      <span class="col-val treso-val">{{ row.banqueTresoNom || row.banqueTreso }}</span>
     </div>
   </div>
 
+</div>
+
+<!-- Add correspondance modal -->
+<div class="modal-backdrop" *ngIf="showForm" (click)="closeForm()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <div class="modal-icon">🏦</div>
+        <h2>Nouvelle correspondance</h2>
+      </div>
+      <button class="modal-x" (click)="closeForm()">✕</button>
+    </div>
+
+    <div class="modal-content">
+
+      <div class="field-group">
+        <label class="field-label">Banque X3</label>
+        <select [(ngModel)]="newBanqueX3" class="modern-select">
+          <option value="">— Sélectionner une banque —</option>
+          <option *ngFor="let b of banquesX3" [value]="b.BAN">{{ b.PAB }}</option>
+        </select>
+      </div>
+
+      <div class="arrow-separator">→</div>
+
+      <div class="field-group">
+        <label class="field-label">Banque Trésorerie</label>
+        <select [(ngModel)]="newBanqueTreso" class="modern-select treso">
+          <option value="">— Sélectionner une banque —</option>
+          <option *ngFor="let t of banquesTreso" [value]="t.CODE">{{ t.DESCRIPTION }}</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closeForm()">Annuler</button>
+      <button class="btn-confirm" (click)="addCorrespondance()" [disabled]="saving">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Valider
+      </button>
+    </div>
+
+  </div>
 </div>
